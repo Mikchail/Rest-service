@@ -1,0 +1,30 @@
+version: "3.9"
+services:
+  server_rest:
+    container_name: server_rest
+    restart: always
+    build:
+      context: .
+    ports:
+      - "3000:3000"
+    links:
+      - mongo_rest
+    volumes:
+      - .:/app
+      - /app/node_modules
+  mongo_rest:
+    container_name: mongo_rest
+    image: mongo:latest
+    # command: mongo -u admin -p admin --authenticationDatabase admin
+    restart: always
+    volumes:
+      - ./data:/data/db
+      - ./init-mongo.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    environment:
+      - "MONGO_INITDB_ROOT_USERNAME=admin"
+      - "MONGO_INITDB_ROOT_PASSWORD=admin"
+    ports:
+      - '27017:27017'
+volumes:
+  data: {}
+  app:     

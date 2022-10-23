@@ -1,8 +1,10 @@
 const router = require("express").Router();;
 const authControllers = require("../controllers/user-controller");
 const postControllers = require("../controllers/post-controller");
+const conversationControllers = require("../controllers/conversations-controller");
 const { body } = require("express-validator");
 const authMiddleware = require("../middlewares/auth")
+
 
 // router.get("/users", usersControllers.getUsers);
 router.post("/login",
@@ -19,6 +21,11 @@ router.post("/post", postControllers.createPost);
 router.get("/posts", authMiddleware, postControllers.getPosts);
 router.put("/post", postControllers.updatePost);
 router.delete("/post", postControllers.deletePost);
+
+router.post("/conversation", conversationControllers.createConversation);
+router.get("/conversations", authMiddleware, conversationControllers.getConversations);
+router.put("/conversation", conversationControllers.updateConversation);
+// router.delete("/conversation", postControllers.deletePost);
 // router.post("/posts", postControllers.getPosts);
 
 module.exports = router;

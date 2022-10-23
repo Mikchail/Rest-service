@@ -25,9 +25,9 @@ class UserService {
     throw ApiError.BadRequest("Неверный логин или пароль!");
   }
 
-  async registeration(email, password) {
+  async registeration(email, password, name) {
     if (!email || !password) {
-      return res.json("нету данных")
+      throw ApiError.BadRequest("нету данных");
     }
     const oldUser = await UserModel.findOne({ email });
     if (oldUser) {
@@ -35,14 +35,14 @@ class UserService {
     }
     const salt = await bcrypt.genSalt(10);
     const hash = await bcrypt.hash(password, salt);
-    const user = await UserModel.create({ email, password: hash });
+    const user = await UserModel.create({ email, password: hash, name });
     const userDto = new UserDto(user);
     const tokens = tokenService.generateToken({ ...userDto })
     await tokenService.saveToken(userDto.id, tokens.refreshToken);
     
     return {
       ...tokens,
-      user: userDto
+      user: userDto,
     };
   }
 

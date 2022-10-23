@@ -1,13 +1,13 @@
-require('dotenv').config()
+// require('dotenv').config()
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const router = require('./src/routers');
 const cookieParser = require('cookie-parser')
-
 const app = express();
 const errorMiddleware = require("./src/middlewares/errors");
-const PORT = 3005;
+const PORT = 3000;
+
 
 app.use(express.json())
 app.use(cookieParser()); 
@@ -19,10 +19,11 @@ const start = async () => {
   const DBoptions = { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true };
 
   try {
-    await mongoose.connect(process.env.DB_URL, DBoptions);
+    await mongoose.connect("mongodb://admin:admin@mongo_rest:27017/admin", DBoptions);
     console.log('Database connect!')
-    await app.listen(PORT);
-    console.log('Server started!')
+    app.listen(PORT, () => {
+      console.log('Server started!', PORT)
+    });
   } catch (err) {
     console.log(err)
   }

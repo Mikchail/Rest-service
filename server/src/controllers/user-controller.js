@@ -22,16 +22,19 @@ class UsersController {
 
   async registeration(req, res, next) {
     try {
+
       const errors = validationResult(req);
+      console.log(errors);
       if (!errors.isEmpty()) {
         next(ApiError.BadRequest("не коректные данные"), errors.array());
+        return;
       }
-      const { email, password } = req.body;
-      const user = await userService.registeration(email, password);
+      const { email, password, name } = req.body;
+      const user = await userService.registeration(email, password, name);
       res.cookie("refreshToken", user.refreshToken, { maxAge: 10 * 24 * 60 * 60 * 1000, httpOnly: true });
       return res.json(user);
     } catch (err) {
-      console.log(err)
+      console.log(err, 2)
       next(err);
     }
   }

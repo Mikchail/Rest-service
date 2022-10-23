@@ -1,24 +1,29 @@
 const { Schema, model } = require('mongoose');
 const UserSchema = new Schema({
-    email: {
-        type: String,
-        required: true,
-        unique: true
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  password: {
+    type: String,
+    required: true,
+    private: true,
+  },
+  name: {
+    type: String,
+  },
+  createDate: {
+    type: Date,
+    dafault: Date.now,
+  },
+  posts: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Post",
     },
-    password: {
-        type: String,
-        required: true,
-        private: true,
-    },
-    createDate: {
-        type: Date,
-        dafault: Date.now
-    },
-    posts: [{
-        type: Schema.Types.ObjectId,
-        ref: 'Post'
-    }]
-})
+  ],
+});
 
 const populationFields = 'posts'
 
